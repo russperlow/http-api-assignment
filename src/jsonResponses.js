@@ -109,3 +109,13 @@ const notImplemented = (request, response, params, acceptedTypes) => {
 
     createResponse(request, response, responseObj, acceptedTypes, 501);
 };
+
+module.exports = {
+    success,
+    badRequest,
+    unauthorized,
+    forbidden,
+    internalError,
+    notImplemented,
+    notFound
+};

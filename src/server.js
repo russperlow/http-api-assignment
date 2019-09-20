@@ -1,6 +1,6 @@
 const http = require('http');
 const url = require('url');
-
+const query = require('querystring');
 const htmlHandler = require('./htmlResponses.js');
 const jsonHandler = require('./jsonResponses.js');
 
@@ -23,13 +23,13 @@ const onRequest = (request, response) => {
     const params = query.parse(parsedUrl.query);
     const acceptedTypes = request.headers.accept.split(',');
 
-    if(urlStruct[parsedUrl.pathName]){
-        urlStruct[parsedUrl.pathName](request, response, params, acceptedTypes);
-    }else{
+    if (urlStruct[parsedUrl.pathname]) {
+        urlStruct[parsedUrl.pathname](request, response, params, acceptedTypes);
+    } else {
         urlStruct.notFound(request, response, params, acceptedTypes);
     }
 }
 
-http.createServer(onRequest).list(port);
+http.createServer(onRequest).listen(port);
 
 console.log(`Listening on 127.0.0.1:${port}`);
