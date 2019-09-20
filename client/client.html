@@ -6,7 +6,51 @@
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   <script type="text/babel">
+    const handleResponse = (xhr) =>{
+      const type = xhr.getResponseHeader('Content-Type');
+      const content = document.querySelector('#content');
+      const h1 = document.createElement('h1');
+      const p = document.createElement('p');
 
+      if(type == 'application/json'){
+        const json = JSON.parse(xhr.response);
+        h1.textContent = json.type;
+        p.textContent = `Message: ${json.message}`;
+      }else if(type == 'text/xml'){
+        const headerType = xhr.responseXML.querySelector('type').textContent;
+        const message = xhr.responseXML.querySelector('message').textContent;
+        h1.textContent = `${headerType}`;
+        p.textContent = `Message: ${message}`;
+      }
+
+      console.dir(xhr.response);
+      content.appendChild(h1);
+      content.appendChild(p);
+    }
+
+    const sendAjax = (url, acceptedType) => {
+      const xhr = new XMLHttpRequest();
+      xhr.open('GET', url);
+      xhr.setRequestHeader('Accept', acceptedType);
+      xhr.onload = () => handleResponse(xhr);
+      xhr.send();
+    }
+
+    const init = () => {
+      const btn = document.querySelector('#send');
+      const page = document.querySelector('#page');
+      const type = document.querySelector('#type');
+
+      page.onchange = () => {
+        type.selectedIndex = 0;
+      }
+
+      button.onclick = () => {
+        sendAjax(page.value, type.value);
+      }
+    }
+
+    window.onload = init;
   </script>
 </head>
 <body>
